@@ -4,7 +4,7 @@ const { normalizePort } = require('./utils');
 
 const app = express();
 
-const port = normalizePort(process.env.PORT || 3000);
+const port = normalizePort(process.env.PORT || 4000);
 
 require('./routes')(app);
 

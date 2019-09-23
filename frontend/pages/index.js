@@ -1,87 +1,146 @@
+import fetch from 'isomorphic-unfetch';
+
 import React from 'react'
 import Head from 'next/head'
-import Nav from '../components/nav'
 
-const Home = () => (
-  <div>
+import User from '../components/user'
+import ComputerIcon from '../components/computer.icon';
+
+const Home = (props) => (
+  <div className='home-page'>
     <Head>
-      <title>Home</title>
+      <title>Address Book</title>
     </Head>
 
-    <Nav />
-
-    <div className='hero'>
-      <h1 className='title'>Welcome to Next.js!</h1>
-      <p className='description'>
-        To get started, edit <code>pages/index.js</code> and save to reload.
-      </p>
-
-      <div className='row'>
-        <a href='https://nextjs.org/docs' className='card'>
-          <h3>Documentation &rarr;</h3>
-          <p>Learn more about Next.js in the documentation.</p>
-        </a>
-        <a href='https://nextjs.org/learn' className='card'>
-          <h3>Next.js Learn &rarr;</h3>
-          <p>Learn about Next.js by following an interactive tutorial!</p>
-        </a>
-        <a
-          href='https://github.com/zeit/next.js/tree/master/examples'
-          className='card'
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Find other example boilerplates on the Next.js GitHub.</p>
-        </a>
+    <div className='wrapper'>
+      <div className='directory'>
+        <div className='panel'>
+          <div className='header'>
+            <h1 className='title'>Address Book</h1>
+          </div>
+          <div className='list'>
+            {props.users.map(user => (
+              <User key={user._id} {...user} />
+            ))}
+          </div>
+        </div>
+        <div className='info'>
+          <img src='static/address_book.png' />
+          <h1 className='title'>Keep in touch with your friends</h1>
+          <p className='description'>
+            This is your address directory where you can find your friend's
+            contact information. Send them a greeting message!
+          </p>
+          <div className='divider'></div>
+          <div className='footer'>
+            <ComputerIcon />
+            <span className='text'>Address Book is available for Mac.</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
+      :global(body) {
+        box-sizing: border-box;
         margin: 0;
+        font-family: system,-apple-system,system-ui,BlinkMacSystemFont,Helvetica Neue,Helvetica,Lucida Grande,sans-serif;
         width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
+        height: 100vh;
+        max-height: 100vh;
+        background-image: linear-gradient(180deg, #03A9F4 100px, #dddbd1 100px, #d2dbdc);
       }
-      .title,
-      .description {
+
+      .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+      }
+
+      .directory {
+        width: calc(100% - 160px);
+        height: calc(100vh - 60px);
+        background-color: #f0f0f0;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,.06), 0 2px 5px 0 rgba(0,0,0,.2);
+
+        display: grid;
+        grid-template-columns: 350px auto;
+      }
+
+      .directory .panel {
+        border-right: 1px solid #cfcfcf;
+        overflow-y: hidden;
+      }
+
+      .panel .header {
+        height: 100px;
+        border-bottom: 1px solid #cfcfcf;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .panel .header .title {
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #4b5961;
+      }
+
+      .panel .list {
+        height: calc(100% - 100px);
+        overflow-y: scroll;
+      }
+
+      .directory .info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .info img {
+        border-radius: 50%;
+        width: 50%;
+        max-width: 350px;
+      }
+
+      .info .title {
+        font-weight: 300;
+        color: #4b5961;
+        margin-top: 2.5rem;
+      }
+
+      .info .description,
+      .info .footer {
+        font-size: 0.8rem;
+        color: #929fa6;
+        max-width: 50%;
         text-align: center;
       }
-      .row {
-        max-width: 880px;
-        margin: 80px auto 40px;
+
+      .info .divider {
+        width: 50%;
+        height: 1px;
+        border-bottom: 1px solid #d9d9d9;
+        margin: 2.0rem 0;
+      }
+
+      .info .footer {
         display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-      .card {
-        padding: 18px 18px 24px;
-        width: 220px;
-        text-align: left;
-        text-decoration: none;
-        color: #434343;
-        border: 1px solid #9b9b9b;
-      }
-      .card:hover {
-        border-color: #067df7;
-      }
-      .card h3 {
-        margin: 0;
-        color: #067df7;
-        font-size: 18px;
-      }
-      .card p {
-        margin: 0;
-        padding: 12px 0 0;
-        font-size: 13px;
-        color: #333;
+        align-items: center;
+        font-size: 0.7rem;
       }
     `}</style>
   </div>
-)
+);
+
+Home.getInitialProps = async ({ req }) => {
+  const res = await fetch('http://localhost:4000/users');
+  const { users } = await res.json();
+  return { users };
+}
 
 export default Home

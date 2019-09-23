@@ -2,7 +2,6 @@
   {
     "_id": "5d88f564dbe1a17a1e501fca",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 25,
     "name": {
       "first": "Murphy",
@@ -18,7 +17,6 @@
   {
     "_id": "5d88f564ec2d87bc4aeee674",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 20,
     "name": {
       "first": "Miranda",
@@ -34,7 +32,6 @@
   {
     "_id": "5d88f56416f677aa26e8b16a",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 38,
     "name": {
       "first": "Velma",
@@ -50,7 +47,6 @@
   {
     "_id": "5d88f5640ecf4f0fab34d294",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 21,
     "name": {
       "first": "Sherry",
@@ -66,7 +62,6 @@
   {
     "_id": "5d88f56481602d4a97d8e9cb",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 31,
     "name": {
       "first": "Nikki",
@@ -82,7 +77,6 @@
   {
     "_id": "5d88f5644482838921a38c51",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 21,
     "name": {
       "first": "Washington",
@@ -98,7 +92,6 @@
   {
     "_id": "5d88f5641e5541f7bd9b2553",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 24,
     "name": {
       "first": "Pearson",
@@ -114,7 +107,6 @@
   {
     "_id": "5d88f56459143d66dbc24b1a",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 24,
     "name": {
       "first": "Gaines",
@@ -130,7 +122,6 @@
   {
     "_id": "5d88f56444c0424f3e007ba7",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 22,
     "name": {
       "first": "Boyd",
@@ -146,7 +137,6 @@
   {
     "_id": "5d88f5647b3b5f06d540d15d",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 40,
     "name": {
       "first": "Gordon",
@@ -162,7 +152,6 @@
   {
     "_id": "5d88f564b9eba237d05ba40f",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 33,
     "name": {
       "first": "Katheryn",
@@ -178,7 +167,6 @@
   {
     "_id": "5d88f564ce0a920c51d642f4",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 37,
     "name": {
       "first": "Blanchard",
@@ -194,7 +182,6 @@
   {
     "_id": "5d88f5644e74a5c6c50ec64c",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 24,
     "name": {
       "first": "Sheree",
@@ -210,7 +197,6 @@
   {
     "_id": "5d88f564a1d03c7ea40d18ae",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 24,
     "name": {
       "first": "Rhoda",
@@ -226,7 +212,6 @@
   {
     "_id": "5d88f5644b532cb278664e6c",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 32,
     "name": {
       "first": "Rae",
@@ -242,7 +227,6 @@
   {
     "_id": "5d88f5642234c3208690c7eb",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 32,
     "name": {
       "first": "Sanford",
@@ -258,7 +242,6 @@
   {
     "_id": "5d88f564caa15a023d578b5f",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 29,
     "name": {
       "first": "Jillian",
@@ -274,7 +257,6 @@
   {
     "_id": "5d88f564b57cf257a187ac07",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 39,
     "name": {
       "first": "Milagros",
@@ -290,7 +272,6 @@
   {
     "_id": "5d88f56429bfd363295048f6",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 23,
     "name": {
       "first": "Berta",
@@ -306,7 +287,6 @@
   {
     "_id": "5d88f5640ebc84ee270cd194",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 30,
     "name": {
       "first": "Evangelina",
@@ -322,7 +302,6 @@
   {
     "_id": "5d88f56431c97cd910d778ff",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 35,
     "name": {
       "first": "Dunlap",
@@ -338,7 +317,6 @@
   {
     "_id": "5d88f564cbc9ab4c00ab3203",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 29,
     "name": {
       "first": "Freida",
@@ -354,7 +332,6 @@
   {
     "_id": "5d88f564bc3a66dfb431440e",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 24,
     "name": {
       "first": "Zelma",
@@ -370,7 +347,6 @@
   {
     "_id": "5d88f564a3eb5dcb4567da92",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 33,
     "name": {
       "first": "Lawanda",
@@ -386,7 +362,6 @@
   {
     "_id": "5d88f5642afe9f55410df759",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 34,
     "name": {
       "first": "Thompson",
@@ -402,7 +377,6 @@
   {
     "_id": "5d88f5644e4de645daa5b499",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 28,
     "name": {
       "first": "Marsha",
@@ -418,7 +392,6 @@
   {
     "_id": "5d88f5647a72297fd4ea554b",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 28,
     "name": {
       "first": "Tonya",
@@ -434,7 +407,6 @@
   {
     "_id": "5d88f564537f6ee79b23da00",
     "isActive": true,
-    "picture": "http://placehold.it/32x32",
     "age": 26,
     "name": {
       "first": "Nguyen",
@@ -450,7 +422,6 @@
   {
     "_id": "5d88f56429b3bebf2c733281",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 36,
     "name": {
       "first": "Conley",
@@ -466,7 +437,6 @@
   {
     "_id": "5d88f5648a6b0e59c46dc4d6",
     "isActive": false,
-    "picture": "http://placehold.it/32x32",
     "age": 20,
     "name": {
       "first": "Sharon",
