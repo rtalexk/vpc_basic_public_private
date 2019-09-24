@@ -6,11 +6,6 @@ cd /
 
 yum update -y
 
-# Download code
-wget https://github.com/rtalexk/vpc_basic_public_private/archive/master.zip
-unzip master.zip
-rm -f master.zip
-
 # Install Nginx
 amazon-linux-extras install nginx1.12 -y
 
