@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch';
+import { handlePromise as hp } from '../utils';
 
 import React from 'react'
 import Head from 'next/head'
@@ -19,7 +20,13 @@ const Home = (props) => (
             <h1 className='title'>Address Book</h1>
           </div>
           <div className='list'>
-            {props.users.map(user => (
+            {props.error && (
+              <div className='list-error'>
+                <img src='static/sad_cat.png' />
+                <p>Ups! It seems that something went wrong. What have you done?</p>
+              </div>
+            )}
+            {props.users && props.users.map(user => (
               <User key={user._id} {...user} />
             ))}
           </div>
@@ -94,6 +101,23 @@ const Home = (props) => (
         overflow-y: scroll;
       }
 
+      .list-error {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .list-error img {
+        width: 100%;
+        margin-top: 16px;
+      }
+
+      .list-error p {
+        color: #929fa6;
+        max-width: 80%;
+        text-align: center;
+      }
+
       .directory .info {
         display: flex;
         flex-direction: column;
@@ -137,9 +161,15 @@ const Home = (props) => (
   </div>
 );
 
-Home.getInitialProps = async ({ req }) => {
-  const res = await fetch('http://localhost:4000/users');
-  const { users } = await res.json();
+Home.getInitialProps = async () => {
+  const [res, reqError] = await hp(fetch('http://localhost:4000/users'));
+
+  if (reqError) { return { error: reqError }; }
+
+  const { users, error } = await res.json();
+
+  if (error) { return { error }; }
+
   return { users };
 }
 
