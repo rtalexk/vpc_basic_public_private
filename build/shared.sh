@@ -31,7 +31,8 @@ cd vpc_basic_public_private-master/$PROJECT
 npm install
 
 # Run project
-if [$PROJECT = frontend] then
+if [$PROJECT = frontend]
+then
     npm run build
 fi
 
