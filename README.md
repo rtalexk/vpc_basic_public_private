@@ -367,3 +367,469 @@ Output:
   "AssociationId": "rtbassoc-077574195a5cb091a"
 }
 ```
+
+## Run EC2 Instance for SSR Frontend
+
+Now let's provision an EC2 instance for the frontend.
+
+```
+run-instances
+  [--block-device-mappings <value>]
+  [--image-id <value>]
+  [--instance-type <value>]
+  [--ipv6-address-count <value>]
+  [--ipv6-addresses <value>]
+  [--kernel-id <value>]
+  [--key-name <value>]
+  [--monitoring <value>]
+  [--placement <value>]
+  [--ramdisk-id <value>]
+  [--security-group-ids <value>]
+  [--security-groups <value>]
+  [--subnet-id <value>]
+  [--user-data <value>]
+  [--additional-info <value>]
+  [--client-token <value>]
+  [--disable-api-termination | --enable-api-termination]
+  [--dry-run | --no-dry-run]
+  [--ebs-optimized | --no-ebs-optimized]
+  [--iam-instance-profile <value>]
+  [--instance-initiated-shutdown-behavior <value>]
+  [--network-interfaces <value>]
+  [--private-ip-address <value>]
+  [--elastic-gpu-specification <value>]
+  [--elastic-inference-accelerators <value>]
+  [--tag-specifications <value>]
+  [--launch-template <value>]
+  [--instance-market-options <value>]
+  [--credit-specification <value>]
+  [--cpu-options <value>]
+  [--capacity-reservation-specification <value>]
+  [--hibernation-options <value>]
+  [--license-specifications <value>]
+  [--count <value>]
+  [--secondary-private-ip-addresses <value>]
+  [--secondary-private-ip-address-count <value>]
+  [--associate-public-ip-address | --no-associate-public-ip-address]
+  [--cli-input-json <value>]
+  [--generate-cli-skeleton <value>]
+```
+
+```bash
+(bash) $ aws ec2 run-instances \
+    --image-id ami-0b69ea66ff7391e80 \
+    --instance-type t2.micro \
+    --subnet-id subnet-035ea7e7fb6ddcf78 \
+    --user-data file://build/frontend.sh \
+    --associate-public-ip-address
+```
+
+**Parameter description**:
+* `--image-id`: refers to Amazon Linux 2.
+* `--instance-type`: the size of the image (RAM, CPU...).
+* `--subnet-id`: our public subnet ID.
+* `--user-data`: a bootstrap script that will run after the instance is provisioned.
+* `--associate-public-ip-address`: by default when you create a VPC all instances created inside it doesn't get public IPs, you have to do other configurations about DHCP to make it happen. But for now we can add this argument to instruct AWS to assign a public IP.
+
+Output:
+
+```json
+{
+  "Instances": [
+    {
+      "Monitoring": {
+        "State": "disabled"
+      },
+      "PublicDnsName": "",
+      "StateReason": {
+        "Message": "pending",
+        "Code": "pending"
+      },
+      "State": {
+        "Code": 0,
+        "Name": "pending"
+      },
+      "EbsOptimized": false,
+      "LaunchTime": "2019-09-26T00:01:00.000Z",
+      "PrivateIpAddress": "10.0.1.69",
+      "ProductCodes": [],
+      "VpcId": "vpc-0d655eeb1089e10ff",
+      "CpuOptions": {
+        "CoreCount": 1,
+        "ThreadsPerCore": 1
+      },
+      "StateTransitionReason": "",
+      "InstanceId": "i-0dc044074404d2a40",
+      "ImageId": "ami-0b69ea66ff7391e80",
+      "PrivateDnsName": "ip-10-0-1-69.ec2.internal",
+      "SecurityGroups": [
+        {
+          "GroupName": "default",
+          "GroupId": "sg-014f765fb502203b5"
+        }
+      ],
+      "ClientToken": "",
+      "SubnetId": "subnet-035ea7e7fb6ddcf78",
+      "InstanceType": "t2.micro",
+      "CapacityReservationSpecification": {
+        "CapacityReservationPreference": "open"
+      },
+      "NetworkInterfaces": [
+        {
+          "Status": "in-use",
+          "MacAddress": "0e:f0:c6:8e:a5:ae",
+          "SourceDestCheck": true,
+          "VpcId": "vpc-0d655eeb1089e10ff",
+          "Description": "",
+          "NetworkInterfaceId": "eni-0f80ce89b4da2009f",
+          "PrivateIpAddresses": [
+            {
+              "Primary": true,
+              "PrivateIpAddress": "10.0.1.69"
+            }
+          ],
+          "SubnetId": "subnet-035ea7e7fb6ddcf78",
+          "InterfaceType": "interface",
+          "Attachment": {
+            "Status": "attaching",
+            "DeviceIndex": 0,
+            "DeleteOnTermination": true,
+            "AttachmentId": "eni-attach-07569b15b11b060df",
+            "AttachTime": "2019-09-26T00:01:00.000Z"
+          },
+          "Groups": [
+            {
+              "GroupName": "default",
+              "GroupId": "sg-014f765fb502203b5"
+            }
+          ],
+          "Ipv6Addresses": [],
+          "OwnerId": "436887685341",
+          "PrivateIpAddress": "10.0.1.69"
+        }
+      ],
+      "SourceDestCheck": true,
+      "Placement": {
+        "Tenancy": "default",
+        "GroupName": "",
+        "AvailabilityZone": "us-east-1a"
+      },
+      "Hypervisor": "xen",
+      "BlockDeviceMappings": [],
+      "Architecture": "x86_64",
+      "RootDeviceType": "ebs",
+      "RootDeviceName": "/dev/xvda",
+      "VirtualizationType": "hvm",
+      "AmiLaunchIndex": 0
+    }
+  ],
+  "ReservationId": "r-07e7876283960b1e5",
+  "Groups": [],
+  "OwnerId": "436887685341"
+}
+```
+
+Wait about 5 minutes so the bootstrap script have time to install the required software for the frontend app (Node.js, Nginx, download the source code of the frontend, build it and run the application).
+
+Now let's test our frontend app. You have to look up for the public IP address, which is not in the response of the `run-instances` command because it takes a moment to be assigned by AWS. So give it one or two minutes to describe the instance and look for it:
+
+```bash
+(bash) $ aws ec2 describe-instances \
+    --instance-ids i-07295e88577440640
+```
+
+The response it's almost the same as `run-instances` but this time with the public IP. Copy and paste in in your favorite browser.
+
+You'll notice that nothing happens. That's because of the firewall.
+
+We have two virtual firewalls available on AWS (whithout counting AWS WAF):
+
+* **Security Groups (SGs)**: lets you define firewall rules at instance level.
+* **Network Access Control List (NACLs)**: lets you define firewall riles at subnet level.
+
+What a Firewall does is let traffic going in and out. You can specify rules at Port, Protocol and Source levels. For example, enable HTTP access on port 80 from anywhere; enable SSH access on port 22 from your IP; etc.
+
+You can create a SG and use it for all your instances in your subnet, or create a NACL with the same rules and all the instances inside the subnet will inherit those rules.
+
+And which of them should I use? Well, when you have common rules that applies to all the instances inside your subnet you could use a NACL, but if you require different rulles for group of instances then you can create SGs with those set of rules and assign according your needs. But in some use cases you can achieve the same goal with one or the other.
+
+As I mentioned when we created the VPC, default NACL and SG got created. They have predefined rules, first see the SG.
+
+```bash
+(bash) $ aws ec2 describe-security-groups \
+    --filters Name=vpc-id,Values=vpc-0d655eeb1089e10ff
+```
+
+Output:
+
+```json
+{
+  "SecurityGroups": [
+    {
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "PrefixListIds": [],
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "UserIdGroupPairs": [],
+          "Ipv6Ranges": []
+        }
+      ],
+      "Description": "default VPC security group",
+      "IpPermissions": [
+        {
+          "IpProtocol": "-1",
+          "PrefixListIds": [],
+          "IpRanges": [],
+          "UserIdGroupPairs": [
+            {
+              "UserId": "436887685341",
+              "GroupId": "sg-014f765fb502203b5"
+            }
+          ],
+          "Ipv6Ranges": []
+        }
+      ],
+      "GroupName": "default",
+      "VpcId": "vpc-0d655eeb1089e10ff",
+      "OwnerId": "436887685341",
+      "GroupId": "sg-014f765fb502203b5"
+    }
+  ]
+}
+```
+
+In the response we can see two important fields: `IpPermissions` and `IpPermissionsEgress`, the first one for `Inbound` rules and the second for `Outbound` rules.
+
+As you can see in `IpPermissionsEgress` we have one rule: `IpProtocol: "-1"` refers to any protocol and `IpRanges.[0].CidrIp: "0.0.0.0/0"` refers to any IP, in other whords, all traffic from anywhere.
+
+That's not the case for `IpPermissions` (inbound rules). We also have any protocol, but it doesn't have specified any IpRanges, otherwise it specifies `UserIdGroupPairs`, where whe have the `GroupId` `sg-014f765fb502203b5`, which is itself. And what does that mean? Well, there can only be communication between instances with the same security group. That does not work for us, because we require to receive traffic from anywhere in our public instances.
+
+We could change the rules for the default SG, but that's not a good practice, because this SG is assigned by default to any instance that does not get specified a SG and if we do that by default all instances will be reachable via internet, which sometimes that's not what we want.
+
+Now let's take a look to our NACL:
+
+```bash
+(bash) $ aws ec2 describe-network-acls \
+    --filters Name=vpc-id,Values=vpc-0d655eeb1089e10ff
+```
+
+Output:
+
+```json
+{
+  "NetworkAcls": [
+    {
+      "Associations": [
+        {
+          "SubnetId": "subnet-035ea7e7fb6ddcf78",
+          "NetworkAclId": "acl-0e307ee23b10f11d3",
+          "NetworkAclAssociationId": "aclassoc-022d6477c1825d362"
+        },
+        {
+          "SubnetId": "subnet-04fc9f2d0dc7d8577",
+          "NetworkAclId": "acl-0e307ee23b10f11d3",
+          "NetworkAclAssociationId": "aclassoc-076225fcb642219cf"
+        }
+      ],
+      "NetworkAclId": "acl-0e307ee23b10f11d3",
+      "VpcId": "vpc-0d655eeb1089e10ff",
+      "Tags": [],
+      "Entries": [
+        {
+          "RuleNumber": 100,
+          "Protocol": "-1",
+          "Egress": true,
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 32767,
+          "Protocol": "-1",
+          "Egress": true,
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        },
+        {
+          "RuleNumber": 100,
+          "Protocol": "-1",
+          "Egress": false,
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 32767,
+          "Protocol": "-1",
+          "Egress": false,
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        }
+      ],
+      "OwnerId": "436887685341",
+      "IsDefault": true
+    }
+  ]
+}
+```
+
+The first thing to notice here is that this NACL is assigned (`Associations`) to our two subnets. It was assigned by default.
+
+Then in the `Entries` array we have four entries: two with `"Egress": true` and two with `"Egress": false`. That is two are Outbound rules and the other two Inbound rules.
+
+All the rules has `"Protocol": "-1"` and `"CidrBlock": "0.0.0.0/0"` which means all traffic from/to anywhere.
+
+The Inboud rules (`"Egress": false`) has a rule that `allow` with a `RuleNumber` of `100`, and other rule that `deny` with a `RuleNumber` of `32767`*.
+
+Rules are applied from lower `RuleNumber` to higer. In this case, first allow (`RuleAction`) all traffic (`Protocol`) from anywhere (`CidrBlock`) (it is an inbound rule), and then deny all traffic from anywhere. As rules are applied from lower to higher, a higer rule can't contradict a lower rule. In other words, a rule that contradicts another is ignored, the first rule is applied, the second one don't. This is the same for Outbound rules.
+
+This `RuleAction` numbers allow you to allow, for example, HTTP traffic from anywhere, and then all other protocols are denied. Everything that is not specified explicitly is denied by defaul.
+
+Now we know what NACLs and Security Groups are for and understand that our EC2 instance is not reachable because it is only accessible from other instances with the same SG, we can start fixing it.
+
+### Create a Public accessible SG
+
+We want to allow HTTP traffic not only from other instance with the same SG but from anywhere.
+
+First we create the SG:
+
+```
+create-security-group
+  --description <value>
+  --group-name <value>
+  [--vpc-id <value>]
+  [--dry-run | --no-dry-run]
+  [--cli-input-json <value>]
+  [--generate-cli-skeleton <value>]
+```
+
+```bash
+(bash) $ aws ec2 create-security-group \
+    --group-name public-http \
+    --vpc-id vpc-0d655eeb1089e10ff \
+    --description "SG that will be assigned to Public Instances for HTTP"
+```
+
+Output:
+
+```json
+{
+  "GroupId": "sg-0878032c34e88e53b"
+}
+```
+
+You can verify which roules where assigned to this SG:
+
+```bash
+(bash) $ aws ec2 describe-security-groups \
+    --filters Name=vpc-id,Values=vpc-0d655eeb1089e10ff,Name=group-name,Values=public-http
+```
+
+Output:
+
+```json
+{
+  "SecurityGroups": [
+    {
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "PrefixListIds": [],
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "UserIdGroupPairs": [],
+          "Ipv6Ranges": []
+        }
+      ],
+      "Description": "SG that will be assigned to Public Instances for HTTP",
+      "IpPermissions": [],
+      "GroupName": "public-http",
+      "VpcId": "vpc-0d655eeb1089e10ff",
+      "OwnerId": "436887685341",
+      "GroupId": "sg-0878032c34e88e53b"
+    }
+  ]
+}
+```
+
+There's no inbound rules (`IpPermissions`) and it allows all traffic to anywhere (`IpPermissionsEgress`).
+
+We want to allow `HTTP` **FROM** anywhere and `HTTP/HTTPS` **TO** anywhere.
+
+First let's revoke the outbound rule that doesn't work for us:
+
+```
+(bash) $ aws ec2 revoke-security-group-egress \
+    --group-id sg-0878032c34e88e53b \
+    --ip-permissions '[{ "IpProtocol": "-1", "IpRanges": [{ "CidrIp": "0.0.0.0/0" }] }]'
+```
+
+If you wish you can query again the SG to verify outbound permissions where revoked.
+
+Now let's allow Inbound rules for HTTP:
+
+```
+(bash) $ aws ec2 authorize-security-group-ingress \
+    --group-id sg-0878032c34e88e53b \
+    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTP from anywhere" }] }]'
+```
+
+Now let's allow Outbound rules for HTTP:
+
+```
+(bash) $ aws ec2 authorize-security-group-egress \
+    --group-id sg-0878032c34e88e53b \
+    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTP to anywhere" }] }]'
+```
+
+And now for HTTPS:
+
+```
+(bash) $ aws ec2 authorize-security-group-egress \
+    --group-id sg-0878032c34e88e53b \
+    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 443, "ToPort": 443, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTPS traffic to anywhere" }] }]'
+```
+
+The reason we need HTTPS traffic is because we are downloading code from Github in the bootstrap script for EC2 instances with `wget`, which makes an HTTPS request.
+
+Now that we have a SG that works for our use case we need to update our running EC2 instance to remove the default SG and assign the one we just have created.
+
+```
+modify-instance-attribute
+  [--source-dest-check | --no-source-dest-check]
+  [--attribute <value>]
+  [--block-device-mappings <value>]
+  [--disable-api-termination | --no-disable-api-termination]
+  [--dry-run | --no-dry-run]
+  [--ebs-optimized | --no-ebs-optimized]
+  [--ena-support | --no-ena-support]
+  [--groups <value>]
+  --instance-id <value>
+  [--instance-initiated-shutdown-behavior <value>]
+  [--instance-type <value>]
+  [--kernel <value>]
+  [--ramdisk <value>]
+  [--sriov-net-support <value>]
+  [--user-data <value>]
+  [--value <value>]
+  [--cli-input-json <value>]
+  [--generate-cli-skeleton <value>]
+```
+
+```bash
+(bash) $ aws ec2 modify-instance-attribute \
+    --instance-id i-0dc044074404d2a40 \
+    --groups sg-0878032c34e88e53b
+```
+
+Now try again to hit your EC2's public IP, you should be able to see the frontend app. If you don't verify again what have you done and try to figure out by yourself what is going on. Trust me, it will give you a lot of experience.
+
+![Example frontend app without backend data](assets/test_01.png)
+
+Notice that we've got an error with the user list. That's because we  don't have the backend instance configured yet.
