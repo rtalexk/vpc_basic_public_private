@@ -162,7 +162,7 @@ const Home = (props) => (
 );
 
 Home.getInitialProps = async () => {
-  const [res, reqError] = await hp(fetch('http://10.0.2.224/users'));
+  const [res, reqError] = await hp(fetch('http://10.0.2.224/users', { timeout: 3000 }));
 
   if (reqError) { return { error: reqError }; }
 
