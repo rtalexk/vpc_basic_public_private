@@ -42,13 +42,23 @@ output
 
 > **IMPORTANT!** Make sure to replace ID parameters in all the AWS commands.
 
-Let's start.
+You can create a table like this one and have it at hand. It contains all the information you'll require throughout the course of this tutorial.
 
-Resource | ID | Description
----------|---|---
-VPC      | vpc-02e27819598ece690 |
-Subnet   | subnet-05a0d3cc0c4ec0216 | Public Subnet
-Subnet   | subnet-06ebb9352499f4bc5 | Private Subnet
+| Resource           | ID                           | Description
+|--------------------|------------------------------|-------------------------
+| VPC                | vpc-02e27819598ece690        | Custom VPC             |
+| Subnet             | subnet-05a0d3cc0c4ec0216     | Public Subnet          |
+| Subnet             | subnet-06ebb9352499f4bc5     | Private Subnet         |
+| Internet Gateway   | igw-0527aad4095e242ca        | Internet Access        |
+| Route Table        | rtb-0f2df4cfaea32bca7        | Public Route Table     |
+| Route Table        | rtb-0c9e03e4587d8bbfb        | Private Route Table    |
+| EC2 Instance       | i-008431283f3257b9c          | Frontend Instance      |
+| EC2 instance       | i-03766f77e98b116a2          | Backend Instance       |
+| Security Group     | sg-0a342975e64209e9c         | Public SG              |
+| Security Group     | sg-0ada40a62aa532178         | Private SG             |
+| User / Owner       | 436887685341                 | AWS Account ID         |
+| Allocation         | eipalloc-08f11b4fabc07ae09   | Elastic IP Allocation  |
+| NatGateway         | nat-005361e3d4f46f277        | NAT Gateway            |
 
 ## Creating a Custom VPC
 
