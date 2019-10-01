@@ -1309,7 +1309,7 @@ Output:
     --vpc-id vpc-02e27819598ece690
 ```
 
-### Delete Security Groups
+### Delete Internet Gateway
 
 ```bash
 (bash) $ aws ec2 delete-internet-gateway \
