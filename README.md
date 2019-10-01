@@ -716,16 +716,16 @@ We want to allow HTTP traffic not only from other instance with the same SG but 
 
 **Inbound Rules**
 
-Type | Protocol | Port | Destination | Description
------|----------|------|-------------|------------
-HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP from anywhere
+Type  | Protocol | Port | Destination | Description
+------|----------|------|-------------|---------------------------
+HTTP  | TCP      | 80   | 0.0.0.0/0   | Allow HTTP from anywhere |
 
 **Outbound Rules**
 
-Type | Protocol | Port | Destination | Description
------|----------|------|-------------|------------
-HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP to download software and updates
-HTTPS | TCP | 443 | 0.0.0.0/0 | Allow HTTPS to download software and updates
+Type  | Protocol | Port | Destination | Description
+------|----------|------|-------------|-----------------------------------------------
+HTTP  | TCP      | 80   | 0.0.0.0/0   | Allow HTTP to download software and updates  |
+HTTPS | TCP      | 443  | 0.0.0.0/0   | Allow HTTPS to download software and updates |
 
 First we create the SG:
 
@@ -877,16 +877,16 @@ For this SG we'll allow inbound traffic comming from the public SG and allow HTT
 
 **Inbound Rules**
 
-Type | Protocol | Port | Destination | Description
------|----------|------|-------------|------------
-HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP from public-sg
+Type  | Protocol | Port | Destination | Description
+------|----------|------|-------------|----------------------------
+HTTP  | TCP      | 80   | 0.0.0.0/0   | Allow HTTP from public-sg |
 
 **Outbound Rules**
 
-Type | Protocol | Port | Destination | Description
------|----------|------|-------------|------------
-HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP to download software and updates
-HTTPS | TCP | 443 | 0.0.0.0/0 | Allow HTTPS to download software and updates
+Type  | Protocol | Port | Destination | Description
+------|----------|------|-------------|-----------------------------------------------
+HTTP  | TCP      | 80   | 0.0.0.0/0   | Allow HTTP to download software and updates  |
+HTTPS | TCP      | 443  | 0.0.0.0/0   | Allow HTTPS to download software and updates |
 
 ```bash
 (bash) $ aws ec2 create-security-group \
