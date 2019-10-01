@@ -20,6 +20,10 @@ There's an EC2 instance in the public subnet with a Server Side Rendered (SSR) R
 
 ## App Example
 
+![Example of running application](assets/test_02.png)
+
+This is a non-functional frontend application which the only thing it does is request data from a API that returns static JSON and displays it in a good-looking way.
+
 ## Prerequisites
 
 This tutorial asumes you have an AWS account and you've configured AWS credentials for CLI, if you haven't [please do so](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html#post-install-configure).
@@ -39,6 +43,12 @@ output
 > **IMPORTANT!** Make sure to replace ID parameters in all the AWS commands.
 
 Let's start.
+
+Resource | ID | Description
+---------|---|---
+VPC      | vpc-02e27819598ece690 |
+Subnet   | subnet-05a0d3cc0c4ec0216 | Public Subnet
+Subnet   | subnet-06ebb9352499f4bc5 | Private Subnet
 
 ## Creating a Custom VPC
 
@@ -64,12 +74,12 @@ Output:
 ```json
 {
   "Vpc": {
-    "VpcId": "vpc-0d655eeb1089e10ff",
+    "VpcId": "vpc-02e27819598ece690",
     "InstanceTenancy": "default",
     "Tags": [],
     "CidrBlockAssociationSet": [
       {
-        "AssociationId": "vpc-cidr-assoc-0d312e44950988d81",
+        "AssociationId": "vpc-cidr-assoc-0c584eccb4dc49679",
         "CidrBlock": "10.0.0.0/16",
         "CidrBlockState": {
           "State": "associated"
@@ -115,7 +125,7 @@ create-subnet
 ```bash
 (bash) $ aws ec2 create-subnet \
     --availability-zone us-east-1a \
-    --vpc-id vpc-0d655eeb1089e10ff \
+    --vpc-id vpc-02e27819598ece690 \
     --cidr-block 10.0.1.0/24
 ```
 
@@ -128,12 +138,12 @@ Output:
     "AvailabilityZoneId": "use1-az6",
     "AvailableIpAddressCount": 251,
     "DefaultForAz": false,
-    "SubnetArn": "arn:aws:ec2:us-east-1:436887685341:subnet/subnet-035ea7e7fb6ddcf78",
+    "SubnetArn": "arn:aws:ec2:us-east-1:436887685341:subnet/subnet-05a0d3cc0c4ec0216",
     "Ipv6CidrBlockAssociationSet": [],
-    "VpcId": "vpc-0d655eeb1089e10ff",
+    "VpcId": "vpc-02e27819598ece690",
     "State": "pending",
     "AvailabilityZone": "us-east-1a",
-    "SubnetId": "subnet-035ea7e7fb6ddcf78",
+    "SubnetId": "subnet-05a0d3cc0c4ec0216",
     "OwnerId": "436887685341",
     "CidrBlock": "10.0.1.0/24",
     "AssignIpv6AddressOnCreation": false
@@ -144,7 +154,7 @@ Output:
 ```bash
 (bash) $ aws ec2 create-subnet \
     --availability-zone us-east-1a \
-    --vpc-id vpc-0d655eeb1089e10ff \
+    --vpc-id vpc-02e27819598ece690 \
     --cidr-block 10.0.2.0/24
 ```
 
@@ -157,12 +167,12 @@ Output:
     "AvailabilityZoneId": "use1-az6",
     "AvailableIpAddressCount": 251,
     "DefaultForAz": false,
-    "SubnetArn": "arn:aws:ec2:us-east-1:436887685341:subnet/subnet-04fc9f2d0dc7d8577",
+    "SubnetArn": "arn:aws:ec2:us-east-1:436887685341:subnet/subnet-06ebb9352499f4bc5",
     "Ipv6CidrBlockAssociationSet": [],
-    "VpcId": "vpc-0d655eeb1089e10ff",
+    "VpcId": "vpc-02e27819598ece690",
     "State": "pending",
     "AvailabilityZone": "us-east-1a",
-    "SubnetId": "subnet-04fc9f2d0dc7d8577",
+    "SubnetId": "subnet-06ebb9352499f4bc5",
     "OwnerId": "436887685341",
     "CidrBlock": "10.0.2.0/24",
     "AssignIpv6AddressOnCreation": false
@@ -196,7 +206,7 @@ Output:
   "InternetGateway": {
     "Tags": [],
     "Attachments": [],
-    "InternetGatewayId": "igw-0d956792dbe1751c5"
+    "InternetGatewayId": "igw-0527aad4095e242ca"
   }
 }
 ```
@@ -216,8 +226,8 @@ attach-internet-gateway
 
 ```bash
 (bash) $ aws ec2 attach-internet-gateway \
-    --internet-gateway-id igw-0d956792dbe1751c5 \
-    --vpc-id vpc-0d655eeb1089e10ff
+    --internet-gateway-id igw-0527aad4095e242ca \
+    --vpc-id vpc-02e27819598ece690
 ```
 
 ## Create Route Tables
@@ -239,7 +249,7 @@ create-route-table
 Execute this command twice so you create two different Route Tables.
 
 ```bash
-(bash) $ aws ec2 create-route-table --vpc-id vpc-0d655eeb1089e10ff
+(bash) $ aws ec2 create-route-table --vpc-id vpc-02e27819598ece690
 ```
 
 Output:
@@ -248,8 +258,8 @@ Output:
 {
   "RouteTable": {
     "Associations": [],
-    "RouteTableId": "rtb-00f0b485037a37edd",
-    "VpcId": "vpc-0d655eeb1089e10ff",
+    "RouteTableId": "rtb-0f2df4cfaea32bca7",
+    "VpcId": "vpc-02e27819598ece690",
     "PropagatingVgws": [],
     "Tags": [],
     "Routes": [
@@ -269,8 +279,8 @@ Output:
 {
   "RouteTable": {
     "Associations": [],
-    "RouteTableId": "rtb-05551d7bcd77d4316",
-    "VpcId": "vpc-0d655eeb1089e10ff",
+    "RouteTableId": "rtb-0c9e03e4587d8bbfb",
+    "VpcId": "vpc-02e27819598ece690",
     "PropagatingVgws": [],
     "Tags": [],
     "Routes": [
@@ -286,8 +296,8 @@ Output:
 }
 ```
 
-* `rtb-00f0b485037a37edd` will be our public subnet (`subnet-035ea7e7fb6ddcf78`).
-* `rtb-05551d7bcd77d4316` will be our private subnet (`subnet-04fc9f2d0dc7d8577`).
+* `rtb-0f2df4cfaea32bca7` will be associated with our public subnet (`subnet-05a0d3cc0c4ec0216`).
+* `rtb-0c9e03e4587d8bbfb` will be associated with our private subnet (`subnet-06ebb9352499f4bc5`).
 
 Also notice that when you create a Route Table it gets by default a Route which goes from `10.0.0.0/16` to `local`. And if you're paying attention the `from` block of IPs is the CIDR of the VPC.
 
@@ -316,12 +326,12 @@ create-route
 
 ```bash
 (bash) $ aws ec2 create-route \
-    --route-table-id rtb-00f0b485037a37edd \
+    --route-table-id rtb-0f2df4cfaea32bca7 \
     --destination-cidr-block 0.0.0.0/0 \
-    --gateway-id igw-0d956792dbe1751c5
+    --gateway-id igw-0527aad4095e242ca
 ```
 
-What this command does is "for the Route Table `rtb-00f0b485037a37edd`, create a route that routes traffic from `0.0.0.0/0` to the Internet Gateway `igw-0d956792dbe1751c5`". The `0.0.0.0/0` CIDR block  match all addresses in the IPv4 address space. In other words, every IP has access to the Internet.
+What this command does is "for the Route Table `rtb-0f2df4cfaea32bca7`, create a route that routes traffic from `0.0.0.0/0` to the Internet Gateway `igw-0527aad4095e242ca`". The `0.0.0.0/0` CIDR block  match all addresses in the IPv4 address space. In other words, every IP has access to the Internet.
 
 ### Associate Route Tables to Subnets
 
@@ -340,15 +350,15 @@ Associate the public Route Table to a Subnet.
 
 ```bash
 (bash) $ aws ec2 associate-route-table \
-    --route-table-id rtb-00f0b485037a37edd \
-    --subnet-id subnet-035ea7e7fb6ddcf78
+    --route-table-id rtb-0f2df4cfaea32bca7 \
+    --subnet-id subnet-05a0d3cc0c4ec0216
 ```
 
 Output:
 
 ```json
 {
-  "AssociationId": "rtbassoc-08fb23dd9088d411b"
+  "AssociationId": "rtbassoc-0fd46a21be2e2f5b5"
 }
 ```
 
@@ -356,15 +366,15 @@ Associate the private Route Table to the other subnet.
 
 ```bash
 (bash) $ aws ec2 associate-route-table \
-    --route-table-id rtb-05551d7bcd77d4316 \
-    --subnet-id subnet-04fc9f2d0dc7d8577
+    --route-table-id rtb-0c9e03e4587d8bbfb \
+    --subnet-id subnet-06ebb9352499f4bc5
 ```
 
 Output:
 
 ```json
 {
-  "AssociationId": "rtbassoc-077574195a5cb091a"
+  "AssociationId": "rtbassoc-0e393eea6c2c31673"
 }
 ```
 
@@ -419,7 +429,7 @@ run-instances
 (bash) $ aws ec2 run-instances \
     --image-id ami-0b69ea66ff7391e80 \
     --instance-type t2.micro \
-    --subnet-id subnet-035ea7e7fb6ddcf78 \
+    --subnet-id subnet-05a0d3cc0c4ec0216 \
     --user-data file://build/frontend.sh \
     --associate-public-ip-address
 ```
@@ -450,26 +460,26 @@ Output:
         "Name": "pending"
       },
       "EbsOptimized": false,
-      "LaunchTime": "2019-09-26T00:01:00.000Z",
-      "PrivateIpAddress": "10.0.1.69",
+      "LaunchTime": "2019-10-01T17:45:04.000Z",
+      "PrivateIpAddress": "10.0.1.147",
       "ProductCodes": [],
-      "VpcId": "vpc-0d655eeb1089e10ff",
+      "VpcId": "vpc-02e27819598ece690",
       "CpuOptions": {
         "CoreCount": 1,
         "ThreadsPerCore": 1
       },
       "StateTransitionReason": "",
-      "InstanceId": "i-0dc044074404d2a40",
+      "InstanceId": "i-008431283f3257b9c",
       "ImageId": "ami-0b69ea66ff7391e80",
-      "PrivateDnsName": "ip-10-0-1-69.ec2.internal",
+      "PrivateDnsName": "ip-10-0-1-147.ec2.internal",
       "SecurityGroups": [
         {
           "GroupName": "default",
-          "GroupId": "sg-014f765fb502203b5"
+          "GroupId": "sg-0019f4fdcc4abd73b"
         }
       ],
       "ClientToken": "",
-      "SubnetId": "subnet-035ea7e7fb6ddcf78",
+      "SubnetId": "subnet-05a0d3cc0c4ec0216",
       "InstanceType": "t2.micro",
       "CapacityReservationSpecification": {
         "CapacityReservationPreference": "open"
@@ -477,35 +487,35 @@ Output:
       "NetworkInterfaces": [
         {
           "Status": "in-use",
-          "MacAddress": "0e:f0:c6:8e:a5:ae",
+          "MacAddress": "0e:f9:cc:7c:a0:34",
           "SourceDestCheck": true,
-          "VpcId": "vpc-0d655eeb1089e10ff",
+          "VpcId": "vpc-02e27819598ece690",
           "Description": "",
-          "NetworkInterfaceId": "eni-0f80ce89b4da2009f",
+          "NetworkInterfaceId": "eni-02b32a003193ef83b",
           "PrivateIpAddresses": [
             {
               "Primary": true,
-              "PrivateIpAddress": "10.0.1.69"
+              "PrivateIpAddress": "10.0.1.147"
             }
           ],
-          "SubnetId": "subnet-035ea7e7fb6ddcf78",
+          "SubnetId": "subnet-05a0d3cc0c4ec0216",
           "InterfaceType": "interface",
           "Attachment": {
             "Status": "attaching",
             "DeviceIndex": 0,
             "DeleteOnTermination": true,
-            "AttachmentId": "eni-attach-07569b15b11b060df",
-            "AttachTime": "2019-09-26T00:01:00.000Z"
+            "AttachmentId": "eni-attach-05d1d1ca2102c2d87",
+            "AttachTime": "2019-10-01T17:45:04.000Z"
           },
           "Groups": [
             {
               "GroupName": "default",
-              "GroupId": "sg-014f765fb502203b5"
+              "GroupId": "sg-0019f4fdcc4abd73b"
             }
           ],
           "Ipv6Addresses": [],
           "OwnerId": "436887685341",
-          "PrivateIpAddress": "10.0.1.69"
+          "PrivateIpAddress": "10.0.1.147"
         }
       ],
       "SourceDestCheck": true,
@@ -523,7 +533,7 @@ Output:
       "AmiLaunchIndex": 0
     }
   ],
-  "ReservationId": "r-07e7876283960b1e5",
+  "ReservationId": "r-025b2b670f3ebdc85",
   "Groups": [],
   "OwnerId": "436887685341"
 }
@@ -535,7 +545,7 @@ Now let's test our frontend app. You have to look up for the public IP address, 
 
 ```bash
 (bash) $ aws ec2 describe-instances \
-    --instance-ids i-07295e88577440640
+    --instance-ids i-008431283f3257b9c
 ```
 
 The response it's almost the same as `run-instances` but this time with the public IP. Copy and paste in in your favorite browser.
@@ -557,7 +567,7 @@ As I mentioned when we created the VPC, default NACL and SG got created. They ha
 
 ```bash
 (bash) $ aws ec2 describe-security-groups \
-    --filters Name=vpc-id,Values=vpc-0d655eeb1089e10ff
+    --filters Name=vpc-id,Values=vpc-02e27819598ece690
 ```
 
 Output:
@@ -588,16 +598,16 @@ Output:
           "UserIdGroupPairs": [
             {
               "UserId": "436887685341",
-              "GroupId": "sg-014f765fb502203b5"
+              "GroupId": "sg-0019f4fdcc4abd73b"
             }
           ],
           "Ipv6Ranges": []
         }
       ],
       "GroupName": "default",
-      "VpcId": "vpc-0d655eeb1089e10ff",
+      "VpcId": "vpc-02e27819598ece690",
       "OwnerId": "436887685341",
-      "GroupId": "sg-014f765fb502203b5"
+      "GroupId": "sg-0019f4fdcc4abd73b"
     }
   ]
 }
@@ -607,7 +617,7 @@ In the response we can see two important fields: `IpPermissions` and `IpPermissi
 
 As you can see in `IpPermissionsEgress` we have one rule: `IpProtocol: "-1"` refers to any protocol and `IpRanges.[0].CidrIp: "0.0.0.0/0"` refers to any IP, in other whords, all traffic from anywhere.
 
-That's not the case for `IpPermissions` (inbound rules). We also have any protocol, but it doesn't have specified any IpRanges, otherwise it specifies `UserIdGroupPairs`, where whe have the `GroupId` `sg-014f765fb502203b5`, which is itself. And what does that mean? Well, there can only be communication between instances with the same security group. That does not work for us, because we require to receive traffic from anywhere in our public instances.
+That's not the case for `IpPermissions` (inbound rules). We also have any protocol, but it doesn't have specified any IpRanges, otherwise it specifies `UserIdGroupPairs`, where whe have the `GroupId` `sg-0019f4fdcc4abd73b`, which is itself. And what does that mean? Well, there can only be communication between instances with the same security group. That does not work for us, because we require to receive traffic from anywhere in our public instances.
 
 We could change the rules for the default SG, but that's not a good practice, because this SG is assigned by default to any instance that does not get specified a SG and if we do that by default all instances will be reachable via internet, which sometimes that's not what we want.
 
@@ -615,7 +625,7 @@ Now let's take a look to our NACL:
 
 ```bash
 (bash) $ aws ec2 describe-network-acls \
-    --filters Name=vpc-id,Values=vpc-0d655eeb1089e10ff
+    --filters Name=vpc-id,Values=vpc-02e27819598ece690
 ```
 
 Output:
@@ -626,18 +636,18 @@ Output:
     {
       "Associations": [
         {
-          "SubnetId": "subnet-035ea7e7fb6ddcf78",
-          "NetworkAclId": "acl-0e307ee23b10f11d3",
-          "NetworkAclAssociationId": "aclassoc-022d6477c1825d362"
+          "SubnetId": "subnet-06ebb9352499f4bc5",
+          "NetworkAclId": "acl-0d0f3e158d4a12c02",
+          "NetworkAclAssociationId": "aclassoc-0fb727289ce20d8b8"
         },
         {
-          "SubnetId": "subnet-04fc9f2d0dc7d8577",
-          "NetworkAclId": "acl-0e307ee23b10f11d3",
-          "NetworkAclAssociationId": "aclassoc-076225fcb642219cf"
+          "SubnetId": "subnet-05a0d3cc0c4ec0216",
+          "NetworkAclId": "acl-0d0f3e158d4a12c02",
+          "NetworkAclAssociationId": "aclassoc-0c53e265482b2494e"
         }
       ],
-      "NetworkAclId": "acl-0e307ee23b10f11d3",
-      "VpcId": "vpc-0d655eeb1089e10ff",
+      "NetworkAclId": "acl-0d0f3e158d4a12c02",
+      "VpcId": "vpc-02e27819598ece690",
       "Tags": [],
       "Entries": [
         {
@@ -694,6 +704,19 @@ Now we know what NACLs and Security Groups are for and understand that our EC2 i
 
 We want to allow HTTP traffic not only from other instance with the same SG but from anywhere.
 
+**Inbound Rules**
+
+Type | Protocol | Port | Destination | Description
+-----|----------|------|-------------|------------
+HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP from anywhere
+
+**Outbound Rules**
+
+Type | Protocol | Port | Destination | Description
+-----|----------|------|-------------|------------
+HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP to download software and updates
+HTTPS | TCP | 443 | 0.0.0.0/0 | Allow HTTPS to download software and updates
+
 First we create the SG:
 
 ```
@@ -709,7 +732,7 @@ create-security-group
 ```bash
 (bash) $ aws ec2 create-security-group \
     --group-name public-http \
-    --vpc-id vpc-0d655eeb1089e10ff \
+    --vpc-id vpc-02e27819598ece690 \
     --description "SG that will be assigned to Public Instances for HTTP"
 ```
 
@@ -717,15 +740,15 @@ Output:
 
 ```json
 {
-  "GroupId": "sg-0878032c34e88e53b"
+  "GroupId": "sg-0a342975e64209e9c"
 }
 ```
 
-You can verify which roules where assigned to this SG:
+You can verify which rules where assigned to this SG:
 
 ```bash
 (bash) $ aws ec2 describe-security-groups \
-    --filters Name=vpc-id,Values=vpc-0d655eeb1089e10ff,Name=group-name,Values=public-http
+    --filters Name=vpc-id,Values=vpc-02e27819598ece690,Name=group-name,Values=public-http
 ```
 
 Output:
@@ -750,9 +773,9 @@ Output:
       "Description": "SG that will be assigned to Public Instances for HTTP",
       "IpPermissions": [],
       "GroupName": "public-http",
-      "VpcId": "vpc-0d655eeb1089e10ff",
+      "VpcId": "vpc-02e27819598ece690",
       "OwnerId": "436887685341",
-      "GroupId": "sg-0878032c34e88e53b"
+      "GroupId": "sg-0a342975e64209e9c"
     }
   ]
 }
@@ -766,7 +789,7 @@ First let's revoke the outbound rule that doesn't work for us:
 
 ```
 (bash) $ aws ec2 revoke-security-group-egress \
-    --group-id sg-0878032c34e88e53b \
+    --group-id sg-0a342975e64209e9c \
     --ip-permissions '[{ "IpProtocol": "-1", "IpRanges": [{ "CidrIp": "0.0.0.0/0" }] }]'
 ```
 
@@ -776,7 +799,7 @@ Now let's allow Inbound rules for HTTP:
 
 ```
 (bash) $ aws ec2 authorize-security-group-ingress \
-    --group-id sg-0878032c34e88e53b \
+    --group-id sg-0a342975e64209e9c \
     --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTP from anywhere" }] }]'
 ```
 
@@ -784,19 +807,19 @@ Now let's allow Outbound rules for HTTP:
 
 ```
 (bash) $ aws ec2 authorize-security-group-egress \
-    --group-id sg-0878032c34e88e53b \
-    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTP to anywhere" }] }]'
+    --group-id sg-0a342975e64209e9c \
+    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTP to download software and updates" }] }]'
 ```
 
 And now for HTTPS:
 
 ```
 (bash) $ aws ec2 authorize-security-group-egress \
-    --group-id sg-0878032c34e88e53b \
-    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 443, "ToPort": 443, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTPS traffic to anywhere" }] }]'
+    --group-id sg-0a342975e64209e9c \
+    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 443, "ToPort": 443, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTPS to download software and updates" }] }]'
 ```
 
-The reason we need HTTPS traffic is because we are downloading code from Github in the bootstrap script for EC2 instances with `wget`, which makes an HTTPS request.
+The reason we need HTTPS traffic is because we are downloading code from Github in the bootstrap script for EC2 instances with `wget`, which makes an HTTPS request (Although it is no longer necessary due to the software was already installed. The default security group has access to anywhere with all protocols).
 
 Now that we have a SG that works for our use case we need to update our running EC2 instance to remove the default SG and assign the one we just have created.
 
@@ -824,12 +847,468 @@ modify-instance-attribute
 
 ```bash
 (bash) $ aws ec2 modify-instance-attribute \
-    --instance-id i-0dc044074404d2a40 \
-    --groups sg-0878032c34e88e53b
+    --instance-id i-008431283f3257b9c \
+    --groups sg-0a342975e64209e9c
 ```
 
-Now try again to hit your EC2's public IP, you should be able to see the frontend app. If you don't verify again what have you done and try to figure out by yourself what is going on. Trust me, it will give you a lot of experience.
+Now try again to hit your EC2's public IP, you should be able to see the frontend app. It could take around five seconds to load the page (an HTTP request is made to the backend app which is not provisioned yet). If you don't verify again what have you done and try to figure out by yourself what is going on. Trust me, it will give you a lot of experience.
 
-![Example frontend app without backend data](assets/test_01.png)
+![Frontend app example without backend data](assets/test_01.png)
 
 Notice that we've got an error with the user list. That's because we  don't have the backend instance configured yet.
+
+## Run EC2 Instance for Backend service
+
+If we create an instance like we did for the frontend, without specifying a SG the default one will be assigned but our frontend instance won't be able to reach the backend one. So first we need to create another SG for this instance. We could use the public one but this allows traffic from anywhere, and for security concerns and good practices we should only allow trust sources.
+
+### Create SG for Backend Instance
+
+For this SG we'll allow inbound traffic comming from the public SG and allow HTTP and HTTPS as outbound. The Backend instance also download code from Github, so we need HTTPS as well.
+
+**Inbound Rules**
+
+Type | Protocol | Port | Destination | Description
+-----|----------|------|-------------|------------
+HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP from public-sg
+
+**Outbound Rules**
+
+Type | Protocol | Port | Destination | Description
+-----|----------|------|-------------|------------
+HTTP | TCP | 80 | 0.0.0.0/0 | Allow HTTP to download software and updates
+HTTPS | TCP | 443 | 0.0.0.0/0 | Allow HTTPS to download software and updates
+
+```bash
+(bash) $ aws ec2 create-security-group \
+    --group-name private-http \
+    --vpc-id vpc-02e27819598ece690 \
+    --description "SG that will be assigned to Private instances for HTTP"
+```
+
+Output:
+
+```json
+{
+  "GroupId": "sg-0ada40a62aa532178"
+}
+```
+
+First let's revoke the default outbound rule:
+
+```bash
+(bash) $ aws ec2 revoke-security-group-egress \
+    --group-id sg-0ada40a62aa532178 \
+    --ip-permissions '[{ "IpProtocol": "-1", "IpRanges": [{ "CidrIp": "0.0.0.0/0" }] }]'
+```
+
+Now let's add our inboud rules. Remember that we only will allow incomming HTTP traffic from the public SG.
+
+> If you don't have at hand the SG ids you can query them by typing `aws ec2 describe-security-groups --filters Name=vpc-id,Values=vpc-02e27819598ece690`. Remember to replace the `vpc-id` by your own.
+
+* Public SG: `sg-0a342975e64209e9c`
+* Private SG: `sg-0ada40a62aa532178`
+
+```bash
+(bash) $ aws ec2 authorize-security-group-ingress \
+  --group-id sg-0ada40a62aa532178 \
+  --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "UserIdGroupPairs": [{ "UserId": "436887685341", "GroupId": "sg-0a342975e64209e9c" }] }]'
+```
+
+This is a slightly different rule from the previous we have been seeing. Instead of `IpRanges` now we are using `UserIdGroupPairs`.This is how we allow inbound traffic from other SG. `UserId` refers to your account ID, you can get it by querying security groups and look in the `OwnerId` field. `GroupId` is the Security Group ID that you want to allow as inbound/egress. In our case the public SG.
+
+Now lets allow outbound traffic for HTTP and HTTPS. This is the same than the public SG.
+
+```bash
+(bash) $ aws ec2 authorize-security-group-egress \
+    --group-id sg-0ada40a62aa532178 \
+    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTP traffic to anywhere" }] }]'
+```
+
+```bash
+(bash) $ aws ec2 authorize-security-group-egress \
+    --group-id sg-0ada40a62aa532178 \
+    --ip-permissions '[{ "IpProtocol": "tcp", "FromPort": 443, "ToPort": 443, "IpRanges": [{ "CidrIp": "0.0.0.0/0", "Description": "Allow HTTPS traffic to anywhere" }] }]'
+```
+
+Our Security Group should look like this:
+
+```bash
+(bash) $ aws ec2 describe-security-groups \
+    --group-id sg-0ada40a62aa532178
+```
+
+```json
+{
+  "SecurityGroups": [
+    {
+      "IpPermissionsEgress": [
+        {
+          "PrefixListIds": [],
+          "FromPort": 80,
+          "IpRanges": [
+            {
+              "Description": "Allow HTTP traffic to anywhere",
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "ToPort": 80,
+          "IpProtocol": "tcp",
+          "UserIdGroupPairs": [],
+          "Ipv6Ranges": []
+        },
+        {
+          "PrefixListIds": [],
+          "FromPort": 443,
+          "IpRanges": [
+            {
+              "Description": "Allow HTTPS traffic to anywhere",
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "ToPort": 443,
+          "IpProtocol": "tcp",
+          "UserIdGroupPairs": [],
+          "Ipv6Ranges": []
+        }
+      ],
+      "Description": "SG that will be assigned to Private instances for HTTP",
+      "IpPermissions": [
+        {
+          "PrefixListIds": [],
+          "FromPort": 80,
+          "IpRanges": [],
+          "ToPort": 80,
+          "IpProtocol": "tcp",
+          "UserIdGroupPairs": [
+            {
+              "UserId": "436887685341",
+              "GroupId": "sg-0a342975e64209e9c"
+            }
+          ],
+          "Ipv6Ranges": []
+        }
+      ],
+      "GroupName": "private-http",
+      "VpcId": "vpc-02e27819598ece690",
+      "OwnerId": "436887685341",
+      "GroupId": "sg-0ada40a62aa532178"
+    }
+  ]
+}
+```
+
+If we try to run the backend instance in this time it will fail because it doesn't have access to internet yet, which is required to download the project code and to install all the required software.
+
+So first lets add internet access to our private subnet.
+
+### Enable outbound internet access to Private subnet
+
+This will allow our instances in the private subnet to reach internet to download software, updates and patches but they won't be publicly accessible. This is an unidirectional internet access, allow from inside to outside but not the other way.
+
+To doing so we require to do three things:
+
+* Allocate an Elastic IP,
+* Create a NAT Gateway, and
+* Route traffic from any IP of the private subnet to the NAT Gateway.
+
+First lets see what an Elastic IP is. When you run an EC2 Instance in the default VPC, AWS assigns a Public IP from an IP pool. If you terminate your instance and run other you'll have a different IP. Those IP from the pool are reused for different resources, so the chance you get the same IP is quite low. The same happen when you stop and start the same instance: the public IP always changes. And here's where Elastic IPs come for the rescue. Once an Elastic IP is allocated, it got a public IP which will remain the same while it is allocated in your account. You can have up to 5 Elastic IPs per region, but this limit can be increased by raising a ticket to AWS.
+
+> To ensure efficient use of Elastic IP addresses, AWS impose a small hourly charge when these IP addresses are not associated with a running instance or when they are associated with a stopped instance or unattached network interface.
+
+#### Allocate an Elastic IP
+
+```bash
+(bash) $ aws ec2 allocate-address --domain vpc
+```
+
+Output:
+
+```json
+{
+  "PublicIp": "52.86.251.146",
+  "Domain": "vpc",
+  "AllocationId": "eipalloc-08f11b4fabc07ae09",
+  "PublicIpv4Pool": "amazon"
+}
+```
+
+#### Create a NAT Gateway
+
+```bash
+(bash) $ aws ec2 create-nat-gateway \
+    --allocation-id eipalloc-08f11b4fabc07ae09 \
+    --subnet-id subnet-05a0d3cc0c4ec0216
+```
+
+Output:
+
+```json
+{
+  "NatGateway": {
+    "NatGatewayAddresses": [
+      {
+        "AllocationId": "eipalloc-08f11b4fabc07ae09"
+      }
+    ],
+    "VpcId": "vpc-02e27819598ece690",
+    "State": "pending",
+    "NatGatewayId": "nat-005361e3d4f46f277",
+    "SubnetId": "subnet-05a0d3cc0c4ec0216",
+    "CreateTime": "2019-10-01T19:55:08.000Z"
+  }
+}
+```
+
+#### Create Route in Private Route Table to route public traffic to NAT Gateway
+
+```bash
+(bash) $ aws ec2 create-route \
+    --route-table-id rtb-0c9e03e4587d8bbfb \
+    --destination-cidr-block 0.0.0.0/0 \
+    --nat-gateway-id nat-005361e3d4f46f277
+```
+
+Output:
+
+```json
+{
+  "Return": true
+}
+```
+
+### Run Backend EC2 Instance
+
+Now that everything is configured we can run our instance in the private subnet using the `backend` bootstrap script. Once we run it we must wait a couple of minutes so the bootstrap script install all the required software and set up the API.
+
+```bash
+(bash) $ aws ec2 run-instances \
+    --image-id ami-0b69ea66ff7391e80 \
+    --instance-type t2.micro \
+    --security-group-ids sg-0ada40a62aa532178 \
+    --subnet-id subnet-06ebb9352499f4bc5 \
+    --user-data file://build/backend.sh \
+    --private-ip-address 10.0.2.224 \
+    --key-name MyNewKeyPair | jq '.'
+```
+
+Output:
+
+```json
+{
+  "Instances": [
+    {
+      "Monitoring": {
+        "State": "disabled"
+      },
+      "PublicDnsName": "",
+      "StateReason": {
+        "Message": "pending",
+        "Code": "pending"
+      },
+      "State": {
+        "Code": 0,
+        "Name": "pending"
+      },
+      "EbsOptimized": false,
+      "LaunchTime": "2019-10-01T19:57:48.000Z",
+      "PrivateIpAddress": "10.0.2.224",
+      "ProductCodes": [],
+      "VpcId": "vpc-02e27819598ece690",
+      "CpuOptions": {
+        "CoreCount": 1,
+        "ThreadsPerCore": 1
+      },
+      "StateTransitionReason": "",
+      "InstanceId": "i-03766f77e98b116a2",
+      "ImageId": "ami-0b69ea66ff7391e80",
+      "PrivateDnsName": "ip-10-0-2-224.ec2.internal",
+      "SecurityGroups": [
+        {
+          "GroupName": "private-http",
+          "GroupId": "sg-0ada40a62aa532178"
+        }
+      ],
+      "ClientToken": "",
+      "SubnetId": "subnet-06ebb9352499f4bc5",
+      "InstanceType": "t2.micro",
+      "CapacityReservationSpecification": {
+        "CapacityReservationPreference": "open"
+      },
+      "NetworkInterfaces": [
+        {
+          "Status": "in-use",
+          "MacAddress": "0e:fb:89:1b:0a:b2",
+          "SourceDestCheck": true,
+          "VpcId": "vpc-02e27819598ece690",
+          "Description": "",
+          "NetworkInterfaceId": "eni-0512a7e98280c3862",
+          "PrivateIpAddresses": [
+            {
+              "Primary": true,
+              "PrivateIpAddress": "10.0.2.224"
+            }
+          ],
+          "SubnetId": "subnet-06ebb9352499f4bc5",
+          "InterfaceType": "interface",
+          "Attachment": {
+            "Status": "attaching",
+            "DeviceIndex": 0,
+            "DeleteOnTermination": true,
+            "AttachmentId": "eni-attach-00b9ca49782db79e8",
+            "AttachTime": "2019-10-01T19:57:48.000Z"
+          },
+          "Groups": [
+            {
+              "GroupName": "private-http",
+              "GroupId": "sg-0ada40a62aa532178"
+            }
+          ],
+          "Ipv6Addresses": [],
+          "OwnerId": "436887685341",
+          "PrivateIpAddress": "10.0.2.224"
+        }
+      ],
+      "SourceDestCheck": true,
+      "Placement": {
+        "Tenancy": "default",
+        "GroupName": "",
+        "AvailabilityZone": "us-east-1a"
+      },
+      "Hypervisor": "xen",
+      "BlockDeviceMappings": [],
+      "Architecture": "x86_64",
+      "RootDeviceType": "ebs",
+      "RootDeviceName": "/dev/xvda",
+      "VirtualizationType": "hvm",
+      "AmiLaunchIndex": 0
+    }
+  ],
+  "ReservationId": "r-0eaa46a2a5849f392",
+  "Groups": [],
+  "OwnerId": "436887685341"
+}
+```
+
+Wait for a couple of minutes while the bootstrap script install the software and the backend application (around five minutes) and the reload the frontend app. You should see something like this:
+
+![Frontend app example with backend data](assets/test_02.png)
+
+## Delete provisioned resources
+
+### Terminate EC2 Instances
+
+```bash
+(bash) $ aws ec2 terminate-instances \
+    --instance-ids i-008431283f3257b9c i-03766f77e98b116a2
+```
+
+Output:
+
+```json
+{
+  "TerminatingInstances": [
+    {
+      "InstanceId": "i-03766f77e98b116a2",
+      "CurrentState": {
+        "Code": 32,
+        "Name": "shutting-down"
+      },
+      "PreviousState": {
+        "Code": 16,
+        "Name": "running"
+      }
+    },
+    {
+      "InstanceId": "i-008431283f3257b9c",
+      "CurrentState": {
+        "Code": 32,
+        "Name": "shutting-down"
+      },
+      "PreviousState": {
+        "Code": 16,
+        "Name": "running"
+      }
+    }
+  ]
+}
+```
+
+### Delete NAT Gateway
+
+```bash
+(bash) $ aws ec2 delete-nat-gateway \
+    --nat-gateway-id nat-005361e3d4f46f277
+```
+
+Output:
+
+```json
+{
+  "NatGatewayId": "nat-005361e3d4f46f277"
+}
+```
+
+### Release Elastic IP
+
+```bash
+(bash) $ aws ec2 release-address \
+    --allocation-id eipalloc-08f11b4fabc07ae09
+```
+
+### Delete Subnets
+
+```bash
+(bash) $ aws ec2 delete-subnet \
+    --subnet-id subnet-05a0d3cc0c4ec0216
+```
+
+```bash
+(bash) $ aws ec2 delete-subnet \
+    --subnet-id subnet-06ebb9352499f4bc5
+```
+
+### Delete Route Tables
+
+```bash
+(bash) $ aws ec2 delete-route-table \
+    --route-table-id rtb-0f2df4cfaea32bca7
+```
+
+```bash
+(bash) $ aws ec2 delete-route-table \
+    --route-table-id rtb-0c9e03e4587d8bbfb
+```
+
+### Delete Security Groups
+
+```bash
+(bash) $ aws ec2 delete-security-group \
+    --group-id sg-0ada40a62aa532178
+```
+
+```bash
+(bash) $ aws ec2 delete-security-group \
+    --group-id sg-0a342975e64209e9c
+```
+
+### Detach Internet Gateway
+
+```bash
+(bash) $ aws ec2 detach-internet-gateway \
+    --internet-gateway-id igw-0527aad4095e242ca \
+    --vpc-id vpc-02e27819598ece690
+```
+
+### Delete Security Groups
+
+```bash
+(bash) $ aws ec2 delete-internet-gateway \
+    --internet-gateway-id igw-0527aad4095e242ca
+```
+
+### Delete VPC
+
+```bash
+(bash) $ aws ec2 delete-vpc \
+    --vpc-id vpc-02e27819598ece690
+```
