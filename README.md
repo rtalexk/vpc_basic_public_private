@@ -110,7 +110,7 @@ Output:
 
 ## Creating subnets
 
-A subnet us a portion of your network (your VPC).
+A subnet is a portion of your network (your VPC).
 
 In an on-premise architecture it is common to design subnets based on departments and functionalities (ie. finances, HR, marketing, each of them with its own subred).
 
