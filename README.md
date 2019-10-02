@@ -112,7 +112,7 @@ Output:
 
 A subnet is a portion of your network (your VPC).
 
-In an on-premise architecture it is common to design subnets based on departments and functionalities (ie. finances, HR, marketing, each of them with its own subred).
+In an on-premise architecture it is common to design subnets based on departments and functionalities (ie. finances, HR, marketing, each of them with its own subnet).
 
 But in cloud it's used to design according to what should be public and what private. Backend services should be isolated from internet and only enable access from known sources. By doing this we keep our services secure from unintended access.
 
@@ -309,9 +309,9 @@ Output:
 * `rtb-0f2df4cfaea32bca7` will be associated with our public subnet (`subnet-05a0d3cc0c4ec0216`).
 * `rtb-0c9e03e4587d8bbfb` will be associated with our private subnet (`subnet-06ebb9352499f4bc5`).
 
-Also notice that when you create a Route Table it gets by default a Route which goes from `10.0.0.0/16` to `local`. And if you're paying attention the `from` block of IPs is the CIDR of the VPC.
+Also notice that when you create a Route Table it gets by default a Route which goes from `10.0.0.0/16` to `local`. And if you're paying attention the `DestinationCidrBlock` block of IPs is the CIDR of the VPC.
 
-What these route does is enable free traffic among instances belonging to the same VPC so that an EC2 instances in a subnet A is able to communicate to an EC2 instance in a subnet B.
+What these route does is enable free traffic among instances belonging to the same VPC so that an EC2 instance in a subnet A is able to communicate to an EC2 instance in a subnet B.
 
 ### Make a subnet Public
 
@@ -558,20 +558,20 @@ Now let's test our frontend app. You have to look up for the public IP address, 
     --instance-ids i-008431283f3257b9c
 ```
 
-The response it's almost the same as `run-instances` but this time with the public IP. Copy and paste in in your favorite browser.
+The response it's almost the same as `run-instances` but this time with the public IP. Copy and paste in your favorite browser.
 
 You'll notice that nothing happens. That's because of the firewall.
 
 We have two virtual firewalls available on AWS (whithout counting AWS WAF):
 
 * **Security Groups (SGs)**: lets you define firewall rules at instance level.
-* **Network Access Control List (NACLs)**: lets you define firewall riles at subnet level.
+* **Network Access Control List (NACLs)**: lets you define firewall rules at subnet level.
 
 What a Firewall does is let traffic going in and out. You can specify rules at Port, Protocol and Source levels. For example, enable HTTP access on port 80 from anywhere; enable SSH access on port 22 from your IP; etc.
 
 You can create a SG and use it for all your instances in your subnet, or create a NACL with the same rules and all the instances inside the subnet will inherit those rules.
 
-And which of them should I use? Well, when you have common rules that applies to all the instances inside your subnet you could use a NACL, but if you require different rulles for group of instances then you can create SGs with those set of rules and assign according your needs. But in some use cases you can achieve the same goal with one or the other.
+And which of them should I use? Well, when you have common rules that applies to all the instances inside your subnet you could use a NACL, but if you require different rules for group of instances then you can create SGs with those set of rules and assign according your needs. But in some use cases you can achieve the same goal with one or the other.
 
 As I mentioned when we created the VPC, default NACL and SG got created. They have predefined rules, first see the SG.
 
@@ -716,7 +716,7 @@ We want to allow HTTP traffic not only from other instance with the same SG but 
 
 **Inbound Rules**
 
-Type  | Protocol | Port | Destination | Description
+Type  | Protocol | Port | Source      | Description
 ------|----------|------|-------------|---------------------------
 HTTP  | TCP      | 80   | 0.0.0.0/0   | Allow HTTP from anywhere |
 
@@ -861,7 +861,7 @@ modify-instance-attribute
     --groups sg-0a342975e64209e9c
 ```
 
-Now try again to hit your EC2's public IP, you should be able to see the frontend app. It could take around five seconds to load the page (an HTTP request is made to the backend app which is not provisioned yet). If you don't verify again what have you done and try to figure out by yourself what is going on. Trust me, it will give you a lot of experience.
+Now try again to hit your EC2's public IP, you should be able to see the frontend app. It could take around five seconds to load the page (an HTTP request is made to the backend app which is not provisioned yet). If you don't, verify again what have you done and try to figure out by yourself what is going on. Trust me, it will give you a lot of experience.
 
 ![Frontend app example without backend data](assets/test_01.png)
 
@@ -877,7 +877,7 @@ For this SG we'll allow inbound traffic comming from the public SG and allow HTT
 
 **Inbound Rules**
 
-Type  | Protocol | Port | Destination | Description
+Type  | Protocol | Port | Source      | Description
 ------|----------|------|-------------|----------------------------
 HTTP  | TCP      | 80   | 0.0.0.0/0   | Allow HTTP from public-sg |
 
@@ -1097,8 +1097,7 @@ Now that everything is configured we can run our instance in the private subnet 
     --security-group-ids sg-0ada40a62aa532178 \
     --subnet-id subnet-06ebb9352499f4bc5 \
     --user-data file://build/backend.sh \
-    --private-ip-address 10.0.2.224 \
-    --key-name MyNewKeyPair | jq '.'
+    --private-ip-address 10.0.2.224
 ```
 
 Output:
